@@ -39,7 +39,7 @@ function eliminarProducto($id){
             unset($_SESSION['productos'][$index]);
         }
     }
-    $_SESSION['productos'] = array_values($_SESSION['productos'])
+    $_SESSION['productos'] = array_values($_SESSION['productos']);
 }
 
 // Realizar una venta (descontar stock)
