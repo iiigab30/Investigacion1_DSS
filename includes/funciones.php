@@ -1,65 +1,118 @@
 <?php
-session_start(); //función de ubicación y persistencia
 
-//arreglo de productos
-if(!isset($_SESSION['productos'])){
+// Verifica si la variable de sesión 'productos' existe.
+// Si no existe, la inicializa como un arreglo vacío.
+// Esto asegura que siempre tengamos un arreglo donde guardar productos.
+if (!isset($_SESSION['productos'])) {
     $_SESSION['productos'] = [];
 }
 
-//funcion para obtener los productos
-function obtenerProductos(){
+//obtener productos
+// Devuelve todos los productos almacenados en la sesión.
+function obtenerProductos() {
     return $_SESSION['productos'];
 }
-// Obtener un producto por ID
+
+//guardar productos
+// Recibe un arreglo de productos y lo guarda en la sesión.
+// Se usa cada vez que se modifica la lista (agregar, editar, eliminar).
+function guardarProductos($productos) {
+    $_SESSION['productos'] = $productos;
+}
+
+//agregar producto
+// Recibe un producto (como arreglo asociativo)
+// Lo agrega al arreglo de productos existente.
+function agregarProducto($producto) {
+    $productos = obtenerProductos();   // Obtiene productos actuales
+    $productos[] = $producto;         // Agrega el nuevo producto
+    guardarProductos($productos);     // Guarda cambios en sesión
+}
+
+
+// Busca un producto específico usando su ID.
 function obtenerProductoPorId($id) {
-    foreach ($_SESSION['productos'] as $p) {
-        if ($p['id'] == $id) return $p;
+    $productos = obtenerProductos();  // Obtiene todos los productos
+
+    // Recorre cada producto
+    foreach ($productos as $producto) {
+
+        // Si el ID coincide, devuelve ese producto
+        if ($producto['id'] == $id) {
+            return $producto;
+        }
     }
+
+    // Si no lo encuentra, devuelve null
     return null;
 }
 
-//funcion para guardar un producto
-function agregarProducto($producto){
-    $_SESSION['productos'][] = $producto;
-}
-
-// Editar un producto existente
-function editarProducto($id_original, $producto) {
-    foreach ($_SESSION['productos'] as $i => $p) {
-        if ($p['id'] == $id_original) {
-            $_SESSION['productos'][$i] = $producto;
-            break;
-        }
-    }
-}
-//eliminar un producto
-function eliminarProducto($id){
-    foreach($_SESSION['productos'] as $index => $prod){
-        if($prod['id'] == $id){
-            unset($_SESSION['productos'][$index]);
-        }
-    }
-    $_SESSION['productos'] = array_values($_SESSION['productos']);
-}
-
-// Realizar una venta (descontar stock)
+//venta
+// Recibe el ID del producto y la cantidad a vender.
 function realizarVenta($id, $cantidad) {
-    foreach ($_SESSION['productos'] as $i => $p) {
-        if ($p['id'] == $id) {
-            $_SESSION['productos'][$i]['stock'] -= $cantidad;
-            break;
+
+    $productos = obtenerProductos(); // Obtiene todos los productos
+
+    // Recorre los productos con índice
+    foreach ($productos as $index => $producto) {
+
+        // Si encuentra el producto por ID
+        if ($producto['id'] == $id) {
+
+            // Verifica si hay suficiente stock
+            if ($producto['stock'] >= $cantidad) {
+
+                // Resta la cantidad vendida al stock
+                $productos[$index]['stock'] -= $cantidad;
+
+                // Guarda los cambios
+                guardarProductos($productos);
+
+                return true; // Venta exitosa
+
+            } else {
+                return false; // No hay suficiente stock
+            }
         }
     }
+
+    return false; // Producto no encontrado
 }
 
-// Verificar si un ID ya existe
-function idExiste($id, $excluir = null) {
-    foreach ($_SESSION['productos'] as $p) {
-        if ($p['id'] == $id && $p['id'] != $excluir) return true;
+//editar el producto
+// Recibe el ID original y un nuevo arreglo con los datos actualizados.
+function editarProducto($id, $nuevo_producto) {
+    $productos = obtenerProductos(); // Obtiene productos actuales
+
+    // Recorre los productos
+    foreach ($productos as $index => $producto) {
+
+        // Si encuentra el producto por ID
+        if ($producto['id'] == $id) {
+
+            // Reemplaza el producto antiguo por el nuevo
+            $productos[$index] = $nuevo_producto;
+
+            break; // Sale del ciclo
+        }
     }
-    return false;
+
+    // Guarda los cambios en la sesión
+    guardarProductos($productos);
 }
 
+// Recibe el ID del producto a eliminar.
+function eliminarProducto($id) {
 
+    $productos = obtenerProductos(); // Obtiene productos actuales
 
+    // Filtra el arreglo dejando todos los productos
+    // excepto el que tenga el ID recibido.
+    $productos = array_filter($productos, function($producto) use ($id) {
+        return $producto['id'] != $id;
+    });
 
+    // Reorganiza los índices del arreglo (array_values)
+    // y guarda los cambios en la sesión.
+    guardarProductos(array_values($productos));
+}

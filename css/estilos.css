@@ -1,0 +1,106 @@
+/* ====== BASE ====== */
+body {
+    background: linear-gradient(135deg, #eef2f7, #dfe9f3);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ====== NAVBAR PRO ====== */
+.navbar-custom {
+    background: linear-gradient(90deg, #1a1a2e, #16213e);
+    padding: 20px 0;
+    min-height: 80px;
+}
+
+.navbar-brand {
+    font-size: 40px;
+    letter-spacing: 1px;
+}
+
+.navbar span{
+    font-size:30px;
+}
+
+/* ====== CONTENIDO ====== */
+main {
+    padding-top: 20px;
+}
+
+/* ====== TARJETAS ====== */
+.card {
+    border-radius: 18px;
+    border: none;
+}
+
+/* ====== TÍTULOS ====== */
+h2 {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 28px;
+}
+
+/* ====== INPUTS ====== */
+.form-control {
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 25px;
+}
+
+.form-label {
+    font-size: 20px;
+    font-weight: 600;
+    color: #34495e;
+}
+/* ====== BOTONES ====== */
+.btn {
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 20px;
+}
+
+/* ====== TABLA ====== */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Hover */
+.table-hover tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* ====== SOMBRA ====== */
+.shadow-lg {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08) !important;
+}
+
+/* ====== FOOTER ====== */
+footer {
+    min-height: 100px;
+    font-size: 30px;
+    background: linear-gradient(90deg, #1a1a2e, #16213e);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+
+    .navbar-brand {
+        font-size: 22px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    .card {
+        padding: 15px !important;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+}
